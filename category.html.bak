@@ -6,18 +6,61 @@
     <title>Central Architects — Категорія</title>
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
-        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background-color: #f9f9f9; color: #333; line-height: 1.6; padding-top: 80px; }
-        .site-header { position: fixed; top: 0; left: 0; width: 100%; height: 60px; background-color: rgba(0, 0, 0, 0.85); backdrop-filter: blur(8px); z-index: 1000; display: flex; align-items: center; justify-content: center; border-bottom: 1px solid rgba(255, 255, 255, 0.1); }
+        body { 
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; 
+            background-color: #121212; 
+            color: #e0e0e0; 
+            line-height: 1.6; 
+            padding-top: 80px; 
+        }
+        
+        .site-header { 
+            position: fixed; 
+            top: 0; 
+            left: 0; 
+            width: 100%; 
+            height: 60px; 
+            background-color: rgba(18, 18, 18, 0.95); 
+            backdrop-filter: blur(8px); 
+            z-index: 1000; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1); 
+        }
         .main-nav { display: flex; gap: 30px; }
-        .main-nav a { color: #ffffff; text-decoration: none; font-size: 15px; font-weight: 500; text-transform: uppercase; letter-spacing: 1px; }
+        .main-nav a { color: #ffffff; text-decoration: none; font-size: 15px; font-weight: 500; text-transform: uppercase; letter-spacing: 1px; transition: color 0.3s; }
         .main-nav a:hover { color: #0073aa; }
+        
         .container { max-width: 1400px; margin: 0 auto; padding: 20px; }
-        .category-title { font-size: 32px; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 30px; padding-bottom: 10px; border-bottom: 2px solid #333; }
+        .category-title { 
+            font-size: 32px; 
+            text-transform: uppercase; 
+            letter-spacing: 2px; 
+            margin-bottom: 30px; 
+            padding-bottom: 10px; 
+            border-bottom: 2px solid #333; 
+            color: #ffffff;
+        }
+        
         .projects-list { display: flex; flex-direction: column; gap: 60px; }
-        .project-item h3 { font-size: 22px; margin-bottom: 15px; color: #444; }
+        .project-item h3 { font-size: 22px; margin-bottom: 15px; color: #ffffff; }
         .project-gallery { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
-        .gallery-card { background: #fff; border-radius: 8px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.06); min-height: 250px; }
-        .gallery-card img { width: 100%; height: 100%; object-fit: cover; display: block; }
+        
+        .gallery-card { 
+            background: #1e1e1e; 
+            border-radius: 8px; 
+            overflow: hidden; 
+            box-shadow: 0 4px 12px rgba(0,0,0,0.5); 
+        }
+        
+        .gallery-card img { 
+            width: 100%; 
+            height: 100%; 
+            object-fit: cover; 
+            display: block; 
+        }
+
         @media (max-width: 768px) { .project-gallery { grid-template-columns: 1fr; } }
     </style>
 </head>
@@ -48,21 +91,40 @@
 
         const extensions = ['.jpg', '.JPG', '.png', '.PNG', '.webp', '.WEBP', '.jpeg', '.JPEG'];
 
-        function autoLoadImage(imgElement, folderPath, indexNum) {
+        // Перевіряємо існування картинки перед тим як додавати її на сторінку
+        function tryLoadImage(folderPath, indexNum, container) {
             const numStr = String(indexNum).padStart(3, '0');
             const basePath = `./${folderPath}/image_${numStr}`;
             let extIndex = 0;
 
-            const tryNext = () => {
-                if (extIndex >= extensions.length) return;
+            const testNextExtension = () => {
+                if (extIndex >= extensions.length) return; // Зображення не існує — нічого не створюємо
+
                 const testUrl = basePath + extensions[extIndex];
                 const tempImg = new Image();
-                tempImg.onload = () => { imgElement.src = testUrl; };
-                tempImg.onerror = () => { extIndex++; tryNext(); };
+
+                tempImg.onload = () => {
+                    // Зображення існує! Створюємо картку і додаємо в галерею
+                    const card = document.createElement('div');
+                    card.className = 'gallery-card';
+
+                    const img = document.createElement('img');
+                    img.src = testUrl;
+                    img.alt = ""; // Відсутній текст, якщо щось згодом трапиться
+
+                    card.appendChild(img);
+                    container.appendChild(card);
+                };
+
+                tempImg.onerror = () => {
+                    extIndex++;
+                    testNextExtension();
+                };
+
                 tempImg.src = testUrl;
             };
 
-            tryNext();
+            testNextExtension();
         }
 
         document.addEventListener("DOMContentLoaded", async () => {
@@ -80,7 +142,7 @@
                 const container = document.getElementById('projects-container');
 
                 if (projects.length === 0) {
-                    container.innerHTML = '<p style="font-size: 18px; color: #777;">У цій категорії поки немає опублікованих проєктів.</p>';
+                    container.innerHTML = '<p style="font-size: 18px; color: #888;">У цій категорії поки немає опублікованих проєктів.</p>';
                     return;
                 }
 
@@ -88,28 +150,20 @@
                     const projectBlock = document.createElement('div');
                     projectBlock.className = 'project-item';
 
-                    let galleryHtml = `<div class="project-gallery">`;
-                    for (let i = 1; i <= project.imagesCount; i++) {
-                        galleryHtml += `
-                            <div class="gallery-card">
-                                <img class="auto-img" data-folder="${project.folder}" data-index="${i}" alt="${project.title}">
-                            </div>
-                        `;
-                    }
-                    galleryHtml += `</div>`;
+                    const titleEl = document.createElement('h3');
+                    titleEl.textContent = project.title;
 
-                    projectBlock.innerHTML = `
-                        <h3>${project.title}</h3>
-                        ${galleryHtml}
-                    `;
+                    const galleryEl = document.createElement('div');
+                    galleryEl.className = 'project-gallery';
 
+                    projectBlock.appendChild(titleEl);
+                    projectBlock.appendChild(galleryEl);
                     container.appendChild(projectBlock);
-                });
 
-                document.querySelectorAll('img.auto-img').forEach(img => {
-                    const folder = img.getAttribute('data-folder');
-                    const index = img.getAttribute('data-index');
-                    autoLoadImage(img, folder, index);
+                    // Шукаємо зображення і додаємо лише ті, що дійсно існують
+                    for (let i = 1; i <= project.imagesCount; i++) {
+                        tryLoadImage(project.folder, i, galleryEl);
+                    }
                 });
 
             } catch (err) {
