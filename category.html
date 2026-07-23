@@ -1,87 +1,121 @@
-<script>
-    const categoryNames = {
-        'interiors': "Інтер'єри",
-        'public_interiors': "Громадські інтер'єри",
-        'architecture': "Архітектура",
-        'public_architecture': "Громадська архітектура"
-    };
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Central Architects — Категорія</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background-color: #f9f9f9; color: #333; line-height: 1.6; padding-top: 80px; }
+        .site-header { position: fixed; top: 0; left: 0; width: 100%; height: 60px; background-color: rgba(0, 0, 0, 0.85); backdrop-filter: blur(8px); z-index: 1000; display: flex; align-items: center; justify-content: center; border-bottom: 1px solid rgba(255, 255, 255, 0.1); }
+        .main-nav { display: flex; gap: 30px; }
+        .main-nav a { color: #ffffff; text-decoration: none; font-size: 15px; font-weight: 500; text-transform: uppercase; letter-spacing: 1px; }
+        .main-nav a:hover { color: #0073aa; }
+        .container { max-width: 1400px; margin: 0 auto; padding: 20px; }
+        .category-title { font-size: 32px; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 30px; padding-bottom: 10px; border-bottom: 2px solid #333; }
+        .projects-list { display: flex; flex-direction: column; gap: 60px; }
+        .project-item h3 { font-size: 22px; margin-bottom: 15px; color: #444; }
+        .project-gallery { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
+        .gallery-card { background: #fff; border-radius: 8px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.06); min-height: 250px; }
+        .gallery-card img { width: 100%; height: 100%; object-fit: cover; display: block; }
+        @media (max-width: 768px) { .project-gallery { grid-template-columns: 1fr; } }
+    </style>
+</head>
+<body>
 
-    const extensions = ['.jpg', '.JPG', '.png', '.PNG', '.webp', '.WEBP', '.jpeg', '.JPEG'];
+    <header class="site-header">
+        <nav class="main-nav">
+            <a href="index.html">Головна</a>
+            <a href="category.html?type=interiors">Інтер'єри</a>
+            <a href="category.html?type=public_interiors">Громадські інтер'єри</a>
+            <a href="category.html?type=architecture">Архітектура</a>
+            <a href="category.html?type=public_architecture">Громадська архітектура</a>
+        </nav>
+    </header>
 
-    function autoLoadImage(imgElement, folderPath, indexNum) {
-        const numStr = String(indexNum).padStart(3, '0'); // Формат 001, 002, 003...
-        const basePath = `./${folderPath}/image_${numStr}`;
-        
-        let extIndex = 0;
+    <main class="container">
+        <h1 id="cat-title" class="category-title">Завантаження...</h1>
+        <div id="projects-container" class="projects-list"></div>
+    </main>
 
-        const tryNext = () => {
-            if (extIndex >= extensions.length) return;
-
-            const testUrl = basePath + extensions[extIndex];
-            const tempImg = new Image();
-            
-            tempImg.onload = () => { imgElement.src = testUrl; };
-            tempImg.onerror = () => {
-                extIndex++;
-                tryNext();
-            };
-            tempImg.src = testUrl;
+    <script>
+        const categoryNames = {
+            'interiors': "Інтер'єри",
+            'public_interiors': "Громадські інтер'єри",
+            'architecture': "Архітектура",
+            'public_architecture': "Громадська архітектура"
         };
 
-        tryNext();
-    }
+        const extensions = ['.jpg', '.JPG', '.png', '.PNG', '.webp', '.WEBP', '.jpeg', '.JPEG'];
 
-    document.addEventListener("DOMContentLoaded", async () => {
-        const urlParams = new URLSearchParams(window.location.search);
-        const catType = urlParams.get('type') || 'interiors';
+        function autoLoadImage(imgElement, folderPath, indexNum) {
+            const numStr = String(indexNum).padStart(3, '0');
+            const basePath = `./${folderPath}/image_${numStr}`;
+            let extIndex = 0;
 
-        document.getElementById('cat-title').textContent = categoryNames[catType] || "Галерея проєктів";
+            const tryNext = () => {
+                if (extIndex >= extensions.length) return;
+                const testUrl = basePath + extensions[extIndex];
+                const tempImg = new Image();
+                tempImg.onload = () => { imgElement.src = testUrl; };
+                tempImg.onerror = () => { extIndex++; tryNext(); };
+                tempImg.src = testUrl;
+            };
 
-        try {
-            const response = await fetch('./projects.json');
-            if (!response.ok) throw new Error("Помилка зчитування projects.json");
-
-            const data = await response.json();
-            const projects = data[catType] || [];
-
-            const container = document.getElementById('projects-container');
-
-            if (projects.length === 0) {
-                container.innerHTML = '<p style="font-size: 18px; color: #777;">У цій категорії поки немає опублікованих проєктів.</p>';
-                return;
-            }
-
-            projects.forEach(project => {
-                const projectBlock = document.createElement('div');
-                projectBlock.className = 'project-item';
-
-                let galleryHtml = `<div class="project-gallery">`;
-                
-                for (let i = 1; i <= project.imagesCount; i++) {
-                    galleryHtml += `
-                        <div class="gallery-card">
-                            <img class="auto-img" data-folder="${project.folder}" data-index="${i}" alt="${project.title}">
-                        </div>
-                    `;
-                }
-                galleryHtml += `</div>`;
-
-                projectBlock.innerHTML = `
-                    <h3>${project.title}</h3>
-                    ${galleryHtml}
-                `;
-
-                container.appendChild(projectBlock);
-            });
-
-            document.querySelectorAll('img.auto-img').forEach(img => {
-                const folder = img.getAttribute('data-folder');
-                const index = img.getAttribute('data-index');
-                autoLoadImage(img, folder, index);
-            });
-
-        } catch (err) {
-            console.error("Помилка завантаження проєктів:", err);
+            tryNext();
         }
-    });
-</script>
+
+        document.addEventListener("DOMContentLoaded", async () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            const catType = urlParams.get('type') || 'interiors';
+
+            document.getElementById('cat-title').textContent = categoryNames[catType] || "Галерея проєктів";
+
+            try {
+                const response = await fetch('./projects.json');
+                if (!response.ok) throw new Error("Помилка файлу projects.json");
+
+                const data = await response.json();
+                const projects = data[catType] || [];
+                const container = document.getElementById('projects-container');
+
+                if (projects.length === 0) {
+                    container.innerHTML = '<p style="font-size: 18px; color: #777;">У цій категорії поки немає опублікованих проєктів.</p>';
+                    return;
+                }
+
+                projects.forEach(project => {
+                    const projectBlock = document.createElement('div');
+                    projectBlock.className = 'project-item';
+
+                    let galleryHtml = `<div class="project-gallery">`;
+                    for (let i = 1; i <= project.imagesCount; i++) {
+                        galleryHtml += `
+                            <div class="gallery-card">
+                                <img class="auto-img" data-folder="${project.folder}" data-index="${i}" alt="${project.title}">
+                            </div>
+                        `;
+                    }
+                    galleryHtml += `</div>`;
+
+                    projectBlock.innerHTML = `
+                        <h3>${project.title}</h3>
+                        ${galleryHtml}
+                    `;
+
+                    container.appendChild(projectBlock);
+                });
+
+                document.querySelectorAll('img.auto-img').forEach(img => {
+                    const folder = img.getAttribute('data-folder');
+                    const index = img.getAttribute('data-index');
+                    autoLoadImage(img, folder, index);
+                });
+
+            } catch (err) {
+                console.error("Помилка завантаження проєктів:", err);
+            }
+        });
+    </script>
+</body>
+</html>

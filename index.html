@@ -1,47 +1,158 @@
-<script>
-    var myFP = fluidPlayer('video-id', {
-        "layoutControls": {
-            "controlBar": { "autoHideTimeout": 3, "animated": true, "autoHide": true },
-            "autoPlay": true, "mute": true, "allowTheatre": true, "fillToContainer": true
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Central Architects</title>
+    <script src="https://cdn.fluidplayer.com/v3/current/fluidplayer.min.js"></script>
+
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        html { scroll-behavior: smooth; }
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background-color: #f9f9f9; color: #333; line-height: 1.6; padding-top: 60px; }
+        .site-header { position: fixed; top: 0; left: 0; width: 100%; height: 60px; background-color: rgba(0, 0, 0, 0.85); backdrop-filter: blur(8px); z-index: 1000; display: flex; align-items: center; justify-content: center; border-bottom: 1px solid rgba(255, 255, 255, 0.1); }
+        .main-nav { display: flex; gap: 30px; }
+        .main-nav a { color: #ffffff; text-decoration: none; font-size: 15px; font-weight: 500; text-transform: uppercase; letter-spacing: 1px; }
+        .main-nav a:hover { color: #0073aa; }
+        .hero-video-container { position: relative; width: 100%; max-height: calc(100vh - 60px); overflow: hidden; background: #000; }
+        .hero-title-overlay { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 10; color: #ffffff; font-size: 48px; font-weight: 700; text-transform: uppercase; letter-spacing: 3px; text-shadow: 0 4px 15px rgba(0,0,0,0.7); pointer-events: none; text-align: center; width: 100%; padding: 0 20px; }
+        .hero-video-container .fluid_video_wrapper { width: 100% !important; height: 100% !important; }
+        .hero-video-container video { width: 100%; height: 100%; object-fit: cover; }
+        .categories-section { width: 100%; padding: 60px 20px; background: #fff; }
+        .categories-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; width: 100%; max-width: 1400px; margin: 0 auto; }
+        .category-column { display: flex; flex-direction: column; gap: 40px; }
+        .category-block h2 { font-size: 24px; margin-bottom: 15px; padding-bottom: 10px; border-bottom: 2px solid #333; text-transform: uppercase; letter-spacing: 1px; }
+        .category-block h2 a { color: inherit; text-decoration: none; }
+        .category-block h2 a:hover { color: #0073aa; }
+        .category-card-link { display: block; text-decoration: none; border-radius: 8px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.08); background: #eee; min-height: 250px; }
+        .category-card-link img { width: 100%; height: auto; max-height: 450px; object-fit: cover; display: block; }
+        .contact-section { background: #f1f1f1; padding: 60px 20px; }
+        .contact-form-card { background: #ffffff; padding: 30px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); max-width: 600px; margin: 0 auto; }
+        .form-group { margin-bottom: 15px; }
+        .form-group label { display: block; margin-bottom: 5px; font-weight: 600; }
+        .form-group input, .form-group textarea { width: 100%; padding: 10px 12px; border: 1px solid #ccc; border-radius: 4px; font-size: 14px; }
+        .form-group textarea { resize: vertical; min-height: 120px; }
+        .btn-submit { background-color: #0073aa; color: #fff; border: none; padding: 12px 24px; border-radius: 4px; cursor: pointer; font-weight: bold; }
+        @media (max-width: 768px) { .hero-title-overlay { font-size: 28px; } .main-nav { gap: 12px; } .main-nav a { font-size: 12px; } .categories-grid { grid-template-columns: 1fr; } }
+    </style>
+</head>
+<body>
+
+    <header class="site-header">
+        <nav class="main-nav">
+            <a href="index.html#hero">Головна</a>
+            <a href="category.html?type=interiors">Інтер'єри</a>
+            <a href="category.html?type=public_interiors">Громадські інтер'єри</a>
+            <a href="category.html?type=architecture">Архітектура</a>
+            <a href="category.html?type=public_architecture">Громадська архітектура</a>
+        </nav>
+    </header>
+
+    <section id="hero" class="hero-video-container">
+        <h1 class="hero-title-overlay">Central Architects</h1>
+        <video id="video-id">
+            <source src="uploads/video/mainvideo.mp4" type="video/mp4" />
+        </video>
+    </section>
+
+    <section class="categories-section">
+        <div class="categories-grid">
+            <div class="category-column">
+                <div class="category-block">
+                    <h2><a href="category.html?type=interiors">Інтер'єри</a></h2>
+                    <a href="category.html?type=interiors" class="category-card-link">
+                        <img class="category-cover" data-type="interiors" alt="Інтер'єри">
+                    </a>
+                </div>
+                <div class="category-block">
+                    <h2><a href="category.html?type=public_interiors">Громадські інтер'єри</a></h2>
+                    <a href="category.html?type=public_interiors" class="category-card-link">
+                        <img class="category-cover" data-type="public_interiors" alt="Громадські інтер'єри">
+                    </a>
+                </div>
+            </div>
+            <div class="category-column">
+                <div class="category-block">
+                    <h2><a href="category.html?type=architecture">Архітектура</a></h2>
+                    <a href="category.html?type=architecture" class="category-card-link">
+                        <img class="category-cover" data-type="architecture" alt="Архітектура">
+                    </a>
+                </div>
+                <div class="category-block">
+                    <h2><a href="category.html?type=public_architecture">Громадська архітектура</a></h2>
+                    <a href="category.html?type=public_architecture" class="category-card-link">
+                        <img class="category-cover" data-type="public_architecture" alt="Громадська архітектура">
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="contacts" class="contact-section">
+        <div class="contact-form-card">
+            <h2>Зв'язатися з нами</h2>
+            <form action="#" method="post">
+                <div class="form-group">
+                    <label for="name">Ваше ім'я *</label>
+                    <input type="text" id="name" name="your-name" required>
+                </div>
+                <div class="form-group">
+                    <label for="email">Ваш e-mail *</label>
+                    <input type="email" id="email" name="your-email" required>
+                </div>
+                <div class="form-group">
+                    <label for="message">Ваше повідомлення</label>
+                    <textarea id="message" name="your-message"></textarea>
+                </div>
+                <button type="submit" class="btn-submit">Відправити</button>
+            </form>
+        </div>
+    </section>
+
+    <script>
+        var myFP = fluidPlayer('video-id', {
+            "layoutControls": {
+                "controlBar": { "autoHideTimeout": 3, "animated": true, "autoHide": true },
+                "autoPlay": true, "mute": true, "allowTheatre": true, "fillToContainer": true
+            }
+        });
+
+        const extensions = ['.jpg', '.JPG', '.png', '.PNG', '.webp', '.WEBP', '.jpeg', '.JPEG'];
+
+        function loadFirstImageAsCover(imgElement, folderPath) {
+            const basePath = `./${folderPath}/image_001`;
+            let index = 0;
+
+            const tryNext = () => {
+                if (index >= extensions.length) return;
+                const testUrl = basePath + extensions[index];
+                const tempImg = new Image();
+                tempImg.onload = () => { imgElement.src = testUrl; };
+                tempImg.onerror = () => { index++; tryNext(); };
+                tempImg.src = testUrl;
+            };
+            tryNext();
         }
-    });
 
-    const extensions = ['.jpg', '.JPG', '.png', '.PNG', '.webp', '.WEBP', '.jpeg', '.JPEG'];
+        document.addEventListener("DOMContentLoaded", async () => {
+            try {
+                const response = await fetch('./projects.json');
+                if (!response.ok) return;
+                const data = await response.json();
 
-    // Автоматично шукає image_001 у папі першого проєкту категорії
-    function loadFirstImageAsCover(imgElement, folderPath) {
-        const basePath = `./${folderPath}/image_001`;
-        let index = 0;
+                document.querySelectorAll('img.category-cover').forEach(img => {
+                    const type = img.getAttribute('data-type');
+                    const categoryProjects = data[type];
 
-        const tryNext = () => {
-            if (index >= extensions.length) return;
-            const testUrl = basePath + extensions[index];
-            const tempImg = new Image();
-            tempImg.onload = () => { imgElement.src = testUrl; };
-            tempImg.onerror = () => { index++; tryNext(); };
-            tempImg.src = testUrl;
-        };
-        tryNext();
-    }
-
-    document.addEventListener("DOMContentLoaded", async () => {
-        try {
-            const response = await fetch('./projects.json');
-            if (!response.ok) return;
-            const data = await response.json();
-
-            document.querySelectorAll('img.category-cover').forEach(img => {
-                const type = img.getAttribute('data-type');
-                const categoryProjects = data[type];
-
-                // Беремо перший проект з категорії та його image_001
-                if (categoryProjects && categoryProjects.length > 0) {
-                    const firstProject = categoryProjects[0];
-                    loadFirstImageAsCover(img, firstProject.folder);
-                }
-            });
-        } catch (err) {
-            console.error("Помилка завантаження обкладинок категорій:", err);
-        }
-    });
-</script>
+                    if (categoryProjects && categoryProjects.length > 0) {
+                        const firstProject = categoryProjects[0];
+                        loadFirstImageAsCover(img, firstProject.folder);
+                    }
+                });
+            } catch (err) {
+                console.error("Помилка завантаження обкладинок категорій:", err);
+            }
+        });
+    </script>
+</body>
+</html>
