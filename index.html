@@ -225,15 +225,30 @@
         function loadCategoryCover(catKey, folderPath) {
             const imgElement = document.getElementById(`cat-img-${catKey}`);
             if (!imgElement) return;
-            const basePath = `./${folderPath}/image_001`;
-            let index = 0;
+
+            // Перевіряємо за замовчуванням interior_001, після чого image_001
+            const basePaths = [
+                `./${folderPath}/interior_001`,
+                `./${folderPath}/image_001`
+            ];
+            
+            let pathIndex = 0;
+            let extIndex = 0;
 
             const tryNext = () => {
-                if (index >= extensions.length) return;
-                const testUrl = basePath + extensions[index];
+                if (pathIndex >= basePaths.length) return;
+
+                if (extIndex >= extensions.length) {
+                    extIndex = 0;
+                    pathIndex++;
+                    tryNext();
+                    return;
+                }
+
+                const testUrl = basePaths[pathIndex] + extensions[extIndex];
                 const tempImg = new Image();
                 tempImg.onload = () => { imgElement.src = testUrl; };
-                tempImg.onerror = () => { index++; tryNext(); };
+                tempImg.onerror = () => { extIndex++; tryNext(); };
                 tempImg.src = testUrl;
             };
             tryNext();

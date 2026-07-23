@@ -32,6 +32,36 @@
     </div>
 
     <script>
+        const extensions = ['.jpg', '.JPG', '.png', '.PNG', '.webp', '.WEBP', '.jpeg', '.JPEG'];
+
+        function setCardImage(imgElement, folderPath) {
+            const basePaths = [
+                `./${folderPath}/interior_001`,
+                `./${folderPath}/image_001`
+            ];
+            
+            let pathIndex = 0;
+            let extIndex = 0;
+
+            const tryNext = () => {
+                if (pathIndex >= basePaths.length) return;
+
+                if (extIndex >= extensions.length) {
+                    extIndex = 0;
+                    pathIndex++;
+                    tryNext();
+                    return;
+                }
+
+                const testUrl = basePaths[pathIndex] + extensions[extIndex];
+                const tempImg = new Image();
+                tempImg.onload = () => { imgElement.src = testUrl; };
+                tempImg.onerror = () => { extIndex++; tryNext(); };
+                tempImg.src = testUrl;
+            };
+            tryNext();
+        }
+
         document.addEventListener("DOMContentLoaded", async () => {
             const urlParams = new URLSearchParams(window.location.search);
             const categoryType = urlParams.get('type');
@@ -46,19 +76,32 @@
                 const data = await response.json();
                 const projects = data[categoryType] || [];
                 
-                document.getElementById('category-title').textContent = categoryType === 'interiors' ? 'Інтер\'єри' : 'Проєкти';
+                const titlesMap = {
+                    'interiors': 'Інтер\'єри',
+                    'public_interiors': 'Громадські інтер\'єри',
+                    'architecture': 'Архітектура',
+                    'public_architecture': 'Громадська архітектура'
+                };
+
+                document.getElementById('category-title').textContent = titlesMap[categoryType] || 'Проєкти';
                 const grid = document.getElementById('projects-grid');
                 grid.innerHTML = '';
 
                 projects.forEach(project => {
                     const card = document.createElement('a');
-                    // ПРАВИЛЬНЕ ПОСИЛАННЯ (відносне):
                     card.href = `project.html?type=${categoryType}&id=${project.id}`;
                     card.className = 'project-card';
-                    card.innerHTML = `
-                        <img src="./${project.folder}/image_001.jpg" alt="${project.title}">
-                        <div class="project-info"><h3>${project.title}</h3></div>
-                    `;
+                    
+                    const img = document.createElement('img');
+                    img.alt = project.title;
+                    setCardImage(img, project.folder);
+
+                    const info = document.createElement('div');
+                    info.className = 'project-info';
+                    info.innerHTML = `<h3>${project.title}</h3>`;
+
+                    card.appendChild(img);
+                    card.appendChild(info);
                     grid.appendChild(card);
                 });
             } catch (err) {

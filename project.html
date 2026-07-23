@@ -190,17 +190,26 @@
 
     <script>
         const extensions = ['.jpg', '.JPG', '.png', '.PNG', '.webp', '.WEBP', '.jpeg', '.JPEG'];
+        const prefixes = ['interior_', 'image_'];
 
         function loadProjectGallery(container, basePath, num) {
             const formattedIndex = String(num).padStart(3, '0');
+            let prefixIndex = 0;
             let extIndex = 0;
 
             function attemptNextExtension() {
+                if (prefixIndex >= prefixes.length) {
+                    return; // Завершуємо підвантаження, коли картинки закінчилися
+                }
+
                 if (extIndex >= extensions.length) {
+                    extIndex = 0;
+                    prefixIndex++;
+                    attemptNextExtension();
                     return;
                 }
 
-                const currentUrl = `./${basePath}/image_${formattedIndex}${extensions[extIndex]}`;
+                const currentUrl = `./${basePath}/${prefixes[prefixIndex]}${formattedIndex}${extensions[extIndex]}`;
                 const img = new Image();
 
                 img.onload = () => {
@@ -221,32 +230,15 @@
         }
 
         document.addEventListener("DOMContentLoaded", async () => {
-            // Contacts Modal Logic
             const contactsModal = document.getElementById('contacts-modal');
             const openBtn = document.getElementById('open-contacts-btn');
             const closeBtn = document.getElementById('contacts-close');
             const overlay = document.getElementById('contacts-overlay');
 
-            if (openBtn) {
-                openBtn.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    if (contactsModal) contactsModal.classList.add('active');
-                });
-            }
+            if (openBtn) openBtn.addEventListener('click', (e) => { e.preventDefault(); contactsModal.classList.add('active'); });
+            if (closeBtn) closeBtn.addEventListener('click', () => contactsModal.classList.remove('active'));
+            if (overlay) overlay.addEventListener('click', () => contactsModal.classList.remove('active'));
 
-            if (closeBtn) {
-                closeBtn.addEventListener('click', () => {
-                    if (contactsModal) contactsModal.classList.remove('active');
-                });
-            }
-
-            if (overlay) {
-                overlay.addEventListener('click', () => {
-                    if (contactsModal) contactsModal.classList.remove('active');
-                });
-            }
-
-            // URL Parameters parsing
             const urlParams = new URLSearchParams(window.location.search);
             const categoryType = urlParams.get('type');
             const projectId = urlParams.get('id');
