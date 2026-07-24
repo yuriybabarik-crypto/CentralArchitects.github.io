@@ -185,15 +185,15 @@
 
     <main class="blog-container">
         <div class="blog-header">
-            <h1 class="blog-title">Цікаве у реалізації проєктів</h1>
-            <p class="blog-subtitle">Новини з об'єктів, корисні рекомендації, технології та особливості декорування</p>
+            <h1 class="blog-title">Розширюємо простір для комфортного життя!</h1>
+            <p class="blog-subtitle">Корисні рекомендації, технології та особливості декорування та новини з об'єктів. </p>
         </div>
     </main>
 
     <!-- FOOTER BLOG SECTION -->
     <footer class="footer-blog">
         <div class="footer-blog-container">
-            <h2 class="footer-blog-title">Цікаве у реалізації проєктів</h2>
+            <h2 class="footer-blog-title">Цікаве</h2>
             <div class="blog-preview-grid">
                 <a href="blog.html?tag=lighting" class="blog-preview-card">
                     <img src="uploads/blog/titles/image_001.jpg" alt="Освітлення">
