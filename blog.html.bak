@@ -15,7 +15,7 @@
             padding-top: 80px; 
         }
 
-/* HEADER & NAVIGATION */
+        /* HEADER & NAVIGATION */
         .site-header { 
             position: fixed; 
             top: 0; 
@@ -163,21 +163,22 @@
             .blog-preview-grid { grid-template-columns: 1fr; }
             .contacts-body { grid-template-columns: 1fr; }
             .contacts-map { height: 200px; }
-            .main-nav { gap: 10px; }
-            .main-nav a { font-size: 11px; }
+            .main-nav { gap: 18px; }
+            .main-nav a { font-size: 12px; }
         }
     </style>
 </head>
 <body>
 
+    <!-- ОНОВЛЕНИЙ ХЕДЕР З БРЕНДИНГОМ -->
     <header class="site-header">
+        <a href="index.html" class="header-brand">
+            <img src="CentralArchitects.jpg" alt="Central Architects Logo" class="header-logo">
+            <span class="header-title">CENTRAL ARCHITECTS</span>
+        </a>
         <nav class="main-nav">
             <a href="index.html">Головна</a>
-            <a href="category.html?type=interiors">Інтер'єри</a>
-            <a href="category.html?type=public_interiors">Громадські інтер'єри</a>
-            <a href="category.html?type=architecture">Архітектура</a>
-            <a href="category.html?type=public_architecture">Громадська архітектура</a>
-            <a href="blog.html" class="active">Цікаве у реалізації</a>
+            <a href="categories.html">Наші проекти</a>
             <a href="#" id="open-contacts-btn">Контакти</a>
         </nav>
     </header>
