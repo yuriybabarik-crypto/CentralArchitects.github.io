@@ -6,104 +6,254 @@
     <title>Проєкти — Central Architects</title>
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
-        body { font-family: sans-serif; background-color: #121212; color: #fff; padding-top: 60px; }
-        .site-header { position: fixed; top: 0; width: 100%; height: 60px; background: #000; display: flex; align-items: center; justify-content: center; gap: 30px; z-index: 1000; }
-        .site-header a { color: #fff; text-decoration: none; text-transform: uppercase; font-size: 14px; }
-        .site-header a.active { color: #0073aa; }
-        .container { max-width: 1200px; margin: 40px auto; padding: 20px; }
-        h1 { text-align: center; margin-bottom: 40px; text-transform: uppercase; }
-        .projects-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); gap: 30px; }
-        .project-card { background: #1e1e1e; border-radius: 8px; overflow: hidden; text-decoration: none; color: #fff; transition: 0.3s; }
-        .project-card:hover { transform: translateY(-5px); }
-        .project-card img { width: 100%; height: 250px; object-fit: cover; }
-        .project-info { padding: 20px; }
+        html { scroll-behavior: smooth; }
+        body { 
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; 
+            background-color: #121212; 
+            color: #e0e0e0; 
+            line-height: 1.6; 
+            padding-top: 60px; 
+        }
+        
+        .site-header { 
+            position: fixed; 
+            top: 0; 
+            left: 0; 
+            width: 100%; 
+            height: 60px; 
+            background-color: rgba(18, 18, 18, 0.95); 
+            backdrop-filter: blur(8px); 
+            z-index: 1000; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1); 
+        }
+        .main-nav { display: flex; gap: 35px; }
+        .main-nav a { 
+            color: #ffffff; 
+            text-decoration: none; 
+            font-size: 14px; 
+            font-weight: 500; 
+            text-transform: uppercase; 
+            letter-spacing: 1px; 
+            transition: color 0.3s; 
+        }
+        .main-nav a:hover, .main-nav a.active { color: #0073aa; }
+
+        .main-container { max-width: 1400px; margin: 0 auto; padding: 40px 20px; }
+
+        .page-title { 
+            font-size: 32px; 
+            font-weight: 700; 
+            text-transform: uppercase; 
+            letter-spacing: 2px; 
+            color: #ffffff; 
+            text-align: center; 
+            margin-bottom: 40px; 
+        }
+
+        .projects-grid { 
+            display: grid; 
+            grid-template-columns: repeat(2, 1fr) !important; 
+            gap: 20px; 
+        }
+
+        .project-card { 
+            position: relative; 
+            border-radius: 8px; 
+            overflow: hidden; 
+            display: block; 
+            text-decoration: none; 
+            background: #1e1e1e; 
+            aspect-ratio: 16 / 9; 
+            box-shadow: 0 4px 16px rgba(0,0,0,0.5); 
+            transition: transform 0.3s ease, box-shadow 0.3s ease; 
+        }
+        .project-card:hover { 
+            transform: translateY(-6px); 
+            box-shadow: 0 8px 24px rgba(0,0,0,0.8); 
+        }
+        .project-card img { 
+            width: 100%; 
+            height: 100%; 
+            object-fit: cover; 
+            transition: transform 0.5s ease; 
+        }
+        .project-card:hover img { 
+            transform: scale(1.05); 
+        }
+        .project-overlay { 
+            position: absolute; 
+            bottom: 0; 
+            left: 0; 
+            width: 100%; 
+            padding: 20px; 
+            background: linear-gradient(0deg, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0.3) 70%, transparent 100%); 
+        }
+        .project-name { 
+            color: #ffffff; 
+            font-size: 18px; 
+            font-weight: 600; 
+            text-transform: uppercase; 
+            letter-spacing: 1px; 
+        }
+
+        .footer-blog { background: #0a0a0a; padding: 60px 20px 40px; border-top: 1px solid #222; margin-top: 60px; }
+        .footer-blog-container { max-width: 1400px; margin: 0 auto; }
+        .footer-blog-title { font-size: 24px; text-transform: uppercase; letter-spacing: 2px; color: #fff; margin-bottom: 30px; border-bottom: 2px solid #333; padding-bottom: 10px; text-align: left; }
+        
+        .blog-preview-grid { display: grid; grid-template-columns: repeat(4, 1fr) !important; gap: 12px; }
+        .blog-preview-card { position: relative; border-radius: 8px; overflow: hidden; display: block; text-decoration: none; background: #1e1e1e; height: 220px; box-shadow: 0 4px 12px rgba(0,0,0,0.5); transition: transform 0.3s ease; }
+        .blog-preview-card:hover { transform: translateY(-4px); }
+        .blog-preview-card img { width: 100%; height: 100%; object-fit: cover; }
+        
+        .blog-card-overlay { position: absolute; bottom: 0; left: 0; width: 100%; padding: 12px 10px; background: linear-gradient(0deg, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0.4) 70%, transparent 100%); }
+        .blog-card-tag-title { color: #ffffff; font-size: 13px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; word-break: break-word; }
+
+        .site-footer-bottom { text-align: center; color: #666; font-size: 13px; margin-top: 40px; padding-top: 20px; border-top: 1px solid #1a1a1a; }
+
+        @media (max-width: 768px) { 
+            .main-nav { gap: 18px; }
+            .main-nav a { font-size: 12px; }
+            .page-title { font-size: 22px; margin-bottom: 25px; }
+            .projects-grid { gap: 10px; }
+            .project-name { font-size: 12px; }
+            .project-overlay { padding: 10px; }
+            .blog-preview-grid { gap: 6px; }
+            .blog-preview-card { height: 130px; }
+            .blog-card-tag-title { font-size: 10px; letter-spacing: 0; }
+            .blog-card-overlay { padding: 6px 4px; }
+        }
     </style>
 </head>
 <body>
 
     <header class="site-header">
-        <a href="index.html">Головна</a>
-        <a href="categories.html" class="active">Наші проекти</a>
+        <nav class="main-nav">
+            <a href="index.html">Головна</a>
+            <a href="categories.html" class="active">Наші проекти</a>
+            <a href="#" id="open-contacts-btn">Контакти</a>
+        </nav>
     </header>
 
-    <div class="container">
-        <h1 id="category-title">Завантаження...</h1>
-        <div class="projects-grid" id="projects-grid"></div>
-    </div>
+    <main class="main-container">
+        <h1 class="page-title" id="category-title">Проєкти</h1>
+        <div class="projects-grid" id="projects-container"></div>
+    </main>
+
+    <footer class="footer-blog">
+        <div class="footer-blog-container">
+            <h2 class="footer-blog-title">Цікаве у реалізації проєктів</h2>
+            <div class="blog-preview-grid">
+                <a href="blog.html?tag=lighting" class="blog-preview-card">
+                    <img src="uploads/blog/titles/image_001.jpg" alt="Освітлення">
+                    <div class="blog-card-overlay"><span class="blog-card-tag-title">Освітлення</span></div>
+                </a>
+                <a href="blog.html?tag=decor" class="blog-preview-card">
+                    <img src="uploads/blog/titles/image_002.jpg" alt="Декорування">
+                    <div class="blog-card-overlay"><span class="blog-card-tag-title">Декорування</span></div>
+                </a>
+                <a href="blog.html?tag=tech" class="blog-preview-card">
+                    <img src="uploads/blog/titles/image_003.jpg" alt="Нові технології">
+                    <div class="blog-card-overlay"><span class="blog-card-tag-title">Нові технології</span></div>
+                </a>
+                <a href="blog.html?tag=in_progress" class="blog-preview-card">
+                    <img src="uploads/blog/titles/image_004.jpg" alt="У процесі">
+                    <div class="blog-card-overlay"><span class="blog-card-tag-title">У процесі</span></div>
+                </a>
+            </div>
+            <div class="site-footer-bottom">
+                &copy; 2026 Central Architects. Всі права захищено.
+            </div>
+        </div>
+    </footer>
 
     <script>
+        const categoryTitles = {
+            'interiors': "Інтер'єри",
+            'public_interiors': "Громадські інтер'єри",
+            'architecture': "Архітектура",
+            'public_architecture': "Громадська архітектура"
+        };
+
         const extensions = ['.jpg', '.JPG', '.png', '.PNG', '.webp', '.WEBP', '.jpeg', '.JPEG'];
+        const nameCandidates = ['image_001', 'interior_001', 'architecture_001', 'image_1', '1', 'cover'];
 
-        function setCardImage(imgElement, folderPath) {
-            const basePaths = [
-                `./${folderPath}/interior_001`,
-                `./${folderPath}/image_001`
-            ];
+        function findCoverImage(folderPath, imgElement) {
+            const cleanFolder = folderPath.replace(/^\/+|\/+$/g, '');
+            const possibleUrls = [];
             
-            let pathIndex = 0;
-            let extIndex = 0;
-
-            const tryNext = () => {
-                if (pathIndex >= basePaths.length) return;
-
-                if (extIndex >= extensions.length) {
-                    extIndex = 0;
-                    pathIndex++;
-                    tryNext();
-                    return;
+            for (const name of nameCandidates) {
+                for (const ext of extensions) {
+                    possibleUrls.push(`${cleanFolder}/${name}${ext}`);
+                    possibleUrls.push(`./${cleanFolder}/${name}${ext}`);
                 }
+            }
 
-                const testUrl = basePaths[pathIndex] + extensions[extIndex];
+            let currentIndex = 0;
+            function tryNextImage() {
+                if (currentIndex >= possibleUrls.length) return;
+                const currentUrl = possibleUrls[currentIndex];
                 const tempImg = new Image();
-                tempImg.onload = () => { imgElement.src = testUrl; };
-                tempImg.onerror = () => { extIndex++; tryNext(); };
-                tempImg.src = testUrl;
-            };
-            tryNext();
+                tempImg.onload = () => { imgElement.src = currentUrl; };
+                tempImg.onerror = () => { currentIndex++; tryNextImage(); };
+                tempImg.src = currentUrl;
+            }
+            tryNextImage();
         }
 
         document.addEventListener("DOMContentLoaded", async () => {
             const urlParams = new URLSearchParams(window.location.search);
-            const categoryType = urlParams.get('type');
-            
-            if (!categoryType) {
-                document.getElementById('category-title').textContent = "Категорію не знайдено";
-                return;
+            const categoryType = urlParams.get('type') || 'interiors';
+
+            const titleElement = document.getElementById('category-title');
+            if (titleElement && categoryTitles[categoryType]) {
+                titleElement.textContent = categoryTitles[categoryType];
+                document.title = `${categoryTitles[categoryType]} — Central Architects`;
             }
+
+            const container = document.getElementById('projects-container');
 
             try {
                 const response = await fetch('./projects.json');
+                if (!response.ok) throw new Error("Помилка завантаження JSON");
+
                 const data = await response.json();
-                const projects = data[categoryType] || [];
-                
-                const titlesMap = {
-                    'interiors': 'Інтер\'єри',
-                    'public_interiors': 'Громадські інтер\'єри',
-                    'architecture': 'Архітектура',
-                    'public_architecture': 'Громадська архітектура'
-                };
+                const projectsList = data[categoryType] || [];
 
-                document.getElementById('category-title').textContent = titlesMap[categoryType] || 'Проєкти';
-                const grid = document.getElementById('projects-grid');
-                grid.innerHTML = '';
+                if (projectsList.length === 0) {
+                    container.innerHTML = `<p style="grid-column: 1 / -1; text-align: center; color: #888;">У цій категорії поки немає проєктів.</p>`;
+                    return;
+                }
 
-                projects.forEach(project => {
+                container.innerHTML = '';
+                projectsList.forEach((project) => {
                     const card = document.createElement('a');
-                    card.href = `project.html?type=${categoryType}&id=${project.id}`;
+                    // Передаємо id прямо в URL
+                    card.href = `project.html?type=${categoryType}&id=${encodeURIComponent(project.id)}`;
                     card.className = 'project-card';
-                    
+
                     const img = document.createElement('img');
                     img.alt = project.title;
-                    setCardImage(img, project.folder);
 
-                    const info = document.createElement('div');
-                    info.className = 'project-info';
-                    info.innerHTML = `<h3>${project.title}</h3>`;
+                    const overlayDiv = document.createElement('div');
+                    overlayDiv.className = 'project-overlay';
 
+                    const nameSpan = document.createElement('span');
+                    nameSpan.className = 'project-name';
+                    nameSpan.textContent = project.title; // Чітко з поля title
+
+                    overlayDiv.appendChild(nameSpan);
                     card.appendChild(img);
-                    card.appendChild(info);
-                    grid.appendChild(card);
+                    card.appendChild(overlayDiv);
+                    container.appendChild(card);
+
+                    if (project.folder) {
+                        findCoverImage(project.folder, img);
+                    }
                 });
+
             } catch (err) {
                 console.error("Помилка:", err);
             }

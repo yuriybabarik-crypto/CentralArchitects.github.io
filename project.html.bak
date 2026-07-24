@@ -42,73 +42,135 @@
         }
         .main-nav a:hover, .main-nav a.active { color: #0073aa; }
 
-        .project-title-header { text-align: center; padding: 30px 20px 10px; }
-        .project-title-header h1 { font-size: 28px; text-transform: uppercase; letter-spacing: 2px; color: #fff; }
-
-        .project-container { max-width: 1400px; margin: 0 auto; padding: 20px; }
-
-        /* GALLERY GRID */
-        .project-gallery { 
-            display: flex; 
-            flex-direction: column; 
-            gap: 25px; 
-            align-items: center; 
+        /* MAIN CONTAINER */
+        .main-container { max-width: 1400px; margin: 0 auto; padding: 40px 20px; }
+        .project-title { 
+            font-size: 32px; 
+            font-weight: 700; 
+            text-transform: uppercase; 
+            letter-spacing: 2px; 
+            color: #ffffff; 
+            text-align: center; 
+            margin-bottom: 40px; 
         }
-        .project-gallery img { 
+        
+        /* GALLERY GRID: 2 ПО ГОРИЗОНТАЛІ */
+        .gallery-grid { 
+            display: grid; 
+            grid-template-columns: repeat(2, 1fr) !important; 
+            gap: 20px; 
             width: 100%; 
-            max-width: 1200px; 
-            height: auto; 
-            border-radius: 8px; 
-            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.6); 
-            object-fit: cover;
+        }
+        .gallery-item {
+            width: 100%;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.5);
+            background-color: #1e1e1e;
+            aspect-ratio: 16 / 9;
+            cursor: pointer;
+        }
+        .gallery-item img { 
+            width: 100%; 
+            height: 100%; 
+            object-fit: cover; 
+            display: block;
+            transition: transform 0.3s ease;
+        }
+        .gallery-item:hover img {
+            transform: scale(1.03);
+        }
+
+        /* LIGHTBOX STYLES (FADE EFFECT) */
+        .lightbox {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.92);
+            z-index: 2000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+        .lightbox.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+        .lightbox-img-wrapper {
+            max-width: 90%;
+            max-height: 85vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .lightbox-img {
+            max-width: 100%;
+            max-height: 85vh;
+            object-fit: contain;
+            border-radius: 4px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.8);
+            transition: opacity 0.25s ease;
+        }
+        .lightbox-btn {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.1);
+            color: #ffffff;
+            border: none;
+            font-size: 28px;
+            cursor: pointer;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.3s, transform 0.2s;
+            user-select: none;
+            z-index: 2010;
+        }
+        .lightbox-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: scale(1.1);
+        }
+        .lightbox-close { top: 20px; right: 25px; font-size: 32px; }
+        .lightbox-prev { left: 20px; }
+        .lightbox-next { right: 20px; }
+        .lightbox-counter {
+            position: absolute;
+            bottom: 20px;
+            color: #888;
+            font-size: 14px;
+            letter-spacing: 1px;
         }
 
         /* FOOTER BLOG SECTION */
         .footer-blog { background: #0a0a0a; padding: 60px 20px 40px; border-top: 1px solid #222; margin-top: 60px; }
         .footer-blog-container { max-width: 1400px; margin: 0 auto; }
-        .footer-blog-title { font-size: 24px; text-transform: uppercase; letter-spacing: 2px; color: #fff; margin-bottom: 30px; border-bottom: 2px solid #333; padding-bottom: 10px; text-align: left; }
-        
+        .footer-blog-title { font-size: 24px; text-transform: uppercase; letter-spacing: 2px; color: #fff; margin-bottom: 30px; border-bottom: 2px solid #333; padding-bottom: 10px; }
         .blog-preview-grid { display: grid; grid-template-columns: repeat(4, 1fr) !important; gap: 12px; }
-        .blog-preview-card { position: relative; border-radius: 8px; overflow: hidden; display: block; text-decoration: none; background: #1e1e1e; height: 220px; box-shadow: 0 4px 12px rgba(0,0,0,0.5); transition: transform 0.3s ease; }
-        .blog-preview-card:hover { transform: translateY(-4px); }
+        .blog-preview-card { position: relative; border-radius: 8px; overflow: hidden; display: block; text-decoration: none; background: #1e1e1e; height: 220px; }
         .blog-preview-card img { width: 100%; height: 100%; object-fit: cover; }
-        
         .blog-card-overlay { position: absolute; bottom: 0; left: 0; width: 100%; padding: 12px 10px; background: linear-gradient(0deg, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0.4) 70%, transparent 100%); }
-        .blog-card-tag-title { color: #ffffff; font-size: 13px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; word-break: break-word; }
-
+        .blog-card-tag-title { color: #ffffff; font-size: 13px; font-weight: 600; text-transform: uppercase; }
         .site-footer-bottom { text-align: center; color: #666; font-size: 13px; margin-top: 40px; padding-top: 20px; border-top: 1px solid #1a1a1a; }
-
-        /* CONTACTS MODAL LIGHTBOX */
-        .contacts-modal { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: 3000; display: flex; align-items: center; justify-content: center; opacity: 0; pointer-events: none; transition: opacity 0.3s ease; }
-        .contacts-modal.active { opacity: 1; pointer-events: auto; }
-        .contacts-modal-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.85); backdrop-filter: blur(8px); }
-        .contacts-modal-content { position: relative; z-index: 3001; background: #1a1a1a; border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 12px; width: 90%; max-width: 900px; padding: 35px 30px 30px; box-shadow: 0 15px 40px rgba(0,0,0,0.8); color: #fff; }
-        .contacts-company-title { text-align: center; font-size: 26px; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 25px; padding-bottom: 12px; border-bottom: 1px solid rgba(255, 255, 255, 0.15); color: #fff; }
-        .contacts-close { position: absolute; top: 15px; right: 20px; font-size: 32px; color: #888; cursor: pointer; line-height: 1; transition: color 0.2s; }
-        .contacts-close:hover { color: #fff; }
-        .contacts-body { display: grid; grid-template-columns: 1fr 1fr; gap: 25px; }
-        .contacts-info { display: flex; flex-direction: column; gap: 18px; justify-content: center; font-size: 15px; }
-        .contact-item { display: flex; flex-direction: column; gap: 4px; }
-        .contact-item strong { color: #888; font-size: 13px; text-transform: uppercase; letter-spacing: 1px; }
-        .contact-item a { color: #ffffff; text-decoration: none; transition: color 0.2s; }
-        .contact-item a:hover { color: #0073aa; }
-        .phone-group { display: flex; flex-direction: column; gap: 3px; }
-        .messengers-group { display: flex; gap: 10px; margin-top: 4px; }
-        .msg-btn { padding: 6px 14px; border-radius: 4px; font-size: 13px; font-weight: 500; text-decoration: none !important; transition: opacity 0.2s; }
-        .msg-btn.tg { background-color: #24A1DE; color: #fff !important; }
-        .msg-btn.vb { background-color: #7360F2; color: #fff !important; }
-        .msg-btn:hover { opacity: 0.85; }
-        .contacts-map { width: 100%; height: 280px; border-radius: 8px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.4); }
 
         @media (max-width: 768px) { 
             .main-nav { gap: 18px; }
             .main-nav a { font-size: 12px; }
+            .project-title { font-size: 22px; margin-bottom: 25px; }
+            .gallery-grid { grid-template-columns: 1fr !important; gap: 12px; }
+            .lightbox-prev { left: 10px; width: 40px; height: 40px; font-size: 20px; }
+            .lightbox-next { right: 10px; width: 40px; height: 40px; font-size: 20px; }
+            .lightbox-close { top: 15px; right: 15px; width: 40px; height: 40px; font-size: 24px; }
             .blog-preview-grid { gap: 6px; }
             .blog-preview-card { height: 130px; }
             .blog-card-tag-title { font-size: 10px; letter-spacing: 0; }
             .blog-card-overlay { padding: 6px 4px; }
-            .contacts-body { grid-template-columns: 1fr; }
-            .contacts-map { height: 200px; }
         }
     </style>
 </head>
@@ -118,17 +180,25 @@
         <nav class="main-nav">
             <a href="index.html">Головна</a>
             <a href="categories.html" class="active">Наші проекти</a>
-            <a href="#" id="open-contacts-btn">Контакти</a>
+            <a href="#">Контакти</a>
         </nav>
     </header>
 
-    <div class="project-title-header">
-        <h1 id="project-title">Завантаження...</h1>
-    </div>
+    <main class="main-container">
+        <h1 class="project-title" id="project-title">Завантаження...</h1>
+        <div class="gallery-grid" id="gallery-container"></div>
+    </main>
 
-    <section class="project-container">
-        <div class="project-gallery" id="project-gallery"></div>
-    </section>
+    <!-- LIGHTBOX -->
+    <div class="lightbox" id="lightbox">
+        <button class="lightbox-btn lightbox-close" id="lb-close">&times;</button>
+        <button class="lightbox-btn lightbox-prev" id="lb-prev">&#10094;</button>
+        <div class="lightbox-img-wrapper">
+            <img src="" alt="" class="lightbox-img" id="lb-img">
+        </div>
+        <button class="lightbox-btn lightbox-next" id="lb-next">&#10095;</button>
+        <div class="lightbox-counter" id="lb-counter"></div>
+    </div>
 
     <footer class="footer-blog">
         <div class="footer-blog-container">
@@ -151,128 +221,156 @@
                     <div class="blog-card-overlay"><span class="blog-card-tag-title">У процесі</span></div>
                 </a>
             </div>
-            <div class="site-footer-bottom">
-                &copy; 2026 Central Architects. Всі права захищено.
-            </div>
+            <div class="site-footer-bottom">&copy; 2026 Central Architects. Всі права захищено.</div>
         </div>
     </footer>
 
-    <div id="contacts-modal" class="contacts-modal">
-        <div class="contacts-modal-overlay" id="contacts-overlay"></div>
-        <div class="contacts-modal-content">
-            <span class="contacts-close" id="contacts-close">&times;</span>
-            <h2 class="contacts-company-title">Central Architects</h2>
-            <div class="contacts-body">
-                <div class="contacts-info">
-                    <div class="contact-item"><strong>Адреса:</strong><span>м. Львів</span></div>
-                    <div class="contact-item">
-                        <strong>Телефон:</strong>
-                        <div class="phone-group">
-                            <a href="tel:0988888888">098-888-88-88</a>
-                            <a href="tel:0633333333">063-333-33-33</a>
-                        </div>
-                    </div>
-                    <div class="contact-item">
-                        <strong>Месенджери:</strong>
-                        <div class="messengers-group">
-                            <a href="https://t.me/" target="_blank" class="msg-btn tg">Telegram</a>
-                            <a href="viber://chat?number=%2B380988888888" class="msg-btn vb">Viber</a>
-                        </div>
-                    </div>
-                    <div class="contact-item"><strong>Email:</strong><a href="mailto:centralarchitects@gmail.com">centralarchitects@gmail.com</a></div>
-                </div>
-                <div class="contacts-map">
-                    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d164627.06202497182!2d23.90699042699905!3d49.83273373200938!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x473add7c09109a53%3A0x3ab39712e55023e1!2sLviv%2C%20Lviv%20Oblast!5e0!3m2!1sen!2sua!4v1700000000000!5m2!1sen!2sua" width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
-                </div>
-            </div>
-        </div>
-    </div>
-
     <script>
         const extensions = ['.jpg', '.JPG', '.png', '.PNG', '.webp', '.WEBP', '.jpeg', '.JPEG'];
-        const prefixes = ['interior_', 'image_'];
+        const loadedImages = []; // Зберігаємо успішно завантажені URL фото
+        let currentImageIndex = 0;
 
-        function loadProjectGallery(container, basePath, num) {
-            const formattedIndex = String(num).padStart(3, '0');
-            let prefixIndex = 0;
-            let extIndex = 0;
+        const lightbox = document.getElementById('lightbox');
+        const lbImg = document.getElementById('lb-img');
+        const lbCounter = document.getElementById('lb-counter');
+        const lbClose = document.getElementById('lb-close');
+        const lbPrev = document.getElementById('lb-prev');
+        const lbNext = document.getElementById('lb-next');
 
-            function attemptNextExtension() {
-                if (prefixIndex >= prefixes.length) {
-                    return; // Завершуємо підвантаження, коли картинки закінчилися
-                }
-
-                if (extIndex >= extensions.length) {
-                    extIndex = 0;
-                    prefixIndex++;
-                    attemptNextExtension();
-                    return;
-                }
-
-                const currentUrl = `./${basePath}/${prefixes[prefixIndex]}${formattedIndex}${extensions[extIndex]}`;
-                const img = new Image();
-
-                img.onload = () => {
-                    img.alt = `Photo ${num}`;
-                    container.appendChild(img);
-                    loadProjectGallery(container, basePath, num + 1);
-                };
-
-                img.onerror = () => {
-                    extIndex++;
-                    attemptNextExtension();
-                };
-
-                img.src = currentUrl;
-            }
-
-            attemptNextExtension();
+        function openLightbox(index) {
+            if (loadedImages.length === 0) return;
+            currentImageIndex = index;
+            updateLightboxImage();
+            lightbox.classList.add('active');
+            document.body.style.overflow = 'hidden';
         }
 
+        function closeLightbox() {
+            lightbox.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        function updateLightboxImage() {
+            lbImg.style.opacity = '0';
+            setTimeout(() => {
+                lbImg.src = loadedImages[currentImageIndex];
+                lbCounter.textContent = `${currentImageIndex + 1} / ${loadedImages.length}`;
+                lbImg.style.opacity = '1';
+            }, 150);
+        }
+
+        function showNextImage() {
+            currentImageIndex = (currentImageIndex + 1) % loadedImages.length;
+            updateLightboxImage();
+        }
+
+        function showPrevImage() {
+            currentImageIndex = (currentImageIndex - 1 + loadedImages.length) % loadedImages.length;
+            updateLightboxImage();
+        }
+
+        // Кліки та гарячі клавіші для лайтбокса
+        lbClose.addEventListener('click', closeLightbox);
+        lbNext.addEventListener('click', (e) => { e.stopPropagation(); showNextImage(); });
+        lbPrev.addEventListener('click', (e) => { e.stopPropagation(); showPrevImage(); });
+        lbImg.addEventListener('click', (e) => { e.stopPropagation(); showNextImage(); });
+
+        lightbox.addEventListener('click', (e) => {
+            if (e.target === lightbox || e.target.classList.contains('lightbox-img-wrapper')) {
+                closeLightbox();
+            }
+        });
+
+        document.addEventListener('keydown', (e) => {
+            if (!lightbox.classList.contains('active')) return;
+            if (e.key === 'Escape') closeLightbox();
+            if (e.key === 'ArrowRight') showNextImage();
+            if (e.key === 'ArrowLeft') showPrevImage();
+        });
+
         document.addEventListener("DOMContentLoaded", async () => {
-            const contactsModal = document.getElementById('contacts-modal');
-            const openBtn = document.getElementById('open-contacts-btn');
-            const closeBtn = document.getElementById('contacts-close');
-            const overlay = document.getElementById('contacts-overlay');
-
-            if (openBtn) openBtn.addEventListener('click', (e) => { e.preventDefault(); contactsModal.classList.add('active'); });
-            if (closeBtn) closeBtn.addEventListener('click', () => contactsModal.classList.remove('active'));
-            if (overlay) overlay.addEventListener('click', () => contactsModal.classList.remove('active'));
-
             const urlParams = new URLSearchParams(window.location.search);
-            const categoryType = urlParams.get('type');
+            const categoryType = urlParams.get('type') || 'interiors';
             const projectId = urlParams.get('id');
 
-            const titleEl = document.getElementById('project-title');
-
-            if (!categoryType || !projectId) {
-                if (titleEl) titleEl.textContent = "Параметри проєкту не вказані";
-                return;
-            }
+            const titleElement = document.getElementById('project-title');
+            const galleryContainer = document.getElementById('gallery-container');
 
             try {
                 const response = await fetch('./projects.json');
-                if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-                
+                if (!response.ok) throw new Error("JSON error");
+
                 const data = await response.json();
-                const projects = data[categoryType] || [];
-                const currentProject = projects.find(p => p.id === projectId);
+                const projectsList = data[categoryType] || [];
 
-                if (currentProject) {
-                    if (titleEl) titleEl.textContent = currentProject.title;
-                    document.title = `${currentProject.title} — Central Architects`;
+                const project = projectsList.find(p => p.id === projectId) || projectsList[parseInt(projectId)];
 
-                    const gallery = document.getElementById('project-gallery');
-                    if (gallery) {
-                        gallery.innerHTML = '';
-                        loadProjectGallery(gallery, currentProject.folder, 1);
-                    }
-                } else {
-                    if (titleEl) titleEl.textContent = "Проєкт не знайдено";
+                if (!project) {
+                    titleElement.textContent = "ПРОЄКТ НЕ ЗНАЙДЕНО";
+                    return;
                 }
+
+                titleElement.textContent = project.title;
+                document.title = `${project.title} — Central Architects`;
+
+                const cleanFolder = project.folder.replace(/^\/+|\/+$/g, '');
+                const count = project.imagesCount || 10;
+
+                galleryContainer.innerHTML = '';
+
+                for (let i = 1; i <= count; i++) {
+                    const numPadded = String(i).padStart(3, '0');
+                    const numShort = String(i);
+
+                    const nameCandidates = [
+                        `image_${numPadded}`,
+                        `image_${numShort}`,
+                        `interior_${numPadded}`,
+                        `architecture_${numPadded}`,
+                        numPadded,
+                        numShort
+                    ];
+
+                    const possibleUrls = [];
+                    for (const name of nameCandidates) {
+                        for (const ext of extensions) {
+                            possibleUrls.push(`${cleanFolder}/${name}${ext}`);
+                        }
+                    }
+
+                    let urlIndex = 0;
+                    function tryLoadImage() {
+                        if (urlIndex >= possibleUrls.length) return;
+                        const currentUrl = possibleUrls[urlIndex];
+                        const temp = new Image();
+                        temp.onload = () => {
+                            const itemIndex = loadedImages.length;
+                            loadedImages.push(currentUrl);
+
+                            const itemWrapper = document.createElement('div');
+                            itemWrapper.className = 'gallery-item';
+
+                            const img = document.createElement('img');
+                            img.src = currentUrl;
+                            img.alt = `${project.title} - Фото ${i}`;
+
+                            itemWrapper.appendChild(img);
+                            itemWrapper.addEventListener('click', () => openLightbox(itemIndex));
+                            galleryContainer.appendChild(itemWrapper);
+                        };
+                        temp.onerror = () => {
+                            urlIndex++;
+                            tryLoadImage();
+                        };
+                        temp.src = currentUrl;
+                    }
+
+                    tryLoadImage();
+                }
+
             } catch (err) {
-                console.error("Помилка завантаження даних проєкту:", err);
-                if (titleEl) titleEl.textContent = "Помилка завантаження даних";
+                console.error(err);
+                titleElement.textContent = "ПОМИЛКА ЗАВАНТАЖЕННЯ";
             }
         });
     </script>
