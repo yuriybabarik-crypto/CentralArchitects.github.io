@@ -15,6 +15,7 @@
             padding-top: 60px; 
         }
         
+/* HEADER & NAVIGATION */
         .site-header { 
             position: fixed; 
             top: 0; 
@@ -26,10 +27,40 @@
             z-index: 1000; 
             display: flex; 
             align-items: center; 
-            justify-content: center; 
+            justify-content: space-between; 
+            padding: 0 30px;
             border-bottom: 1px solid rgba(255, 255, 255, 0.1); 
         }
-        .main-nav { display: flex; gap: 35px; }
+        .header-brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+            height: 100%;
+            z-index: 2;
+        }
+        .header-logo {
+            height: 100%;
+            width: auto;
+            object-fit: contain;
+            mix-blend-mode: screen;
+        }
+        .header-title {
+            color: #ffffff;
+            font-size: 15px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            white-space: nowrap;
+        }
+        .main-nav { 
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex; 
+            gap: 35px; 
+            z-index: 1;
+        }
         .main-nav a { 
             color: #ffffff; 
             text-decoration: none; 
