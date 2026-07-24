@@ -45,8 +45,30 @@
             z-index: 1000; 
             display: flex; 
             align-items: center; 
-            justify-content: center; 
+            justify-content: space-between; 
+            padding: 0 30px;
             border-bottom: 1px solid rgba(255, 255, 255, 0.1); 
+        }
+        .header-brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+            height: 100%;
+        }
+        .header-logo {
+            height: 100%;
+            width: auto;
+            object-fit: contain;
+            mix-blend-mode: screen;
+        }
+        .header-title {
+            color: #ffffff;
+            font-size: 15px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            white-space: nowrap;
         }
         .main-nav { display: flex; gap: 35px; }
         .main-nav a { 
@@ -151,8 +173,10 @@
         .contacts-map { width: 100%; height: 280px; border-radius: 8px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.4); }
 
         @media (max-width: 768px) { 
-            .main-nav { gap: 18px; }
-            .main-nav a { font-size: 12px; }
+            .site-header { padding: 0 15px; }
+            .header-title { font-size: 12px; letter-spacing: 1px; }
+            .main-nav { gap: 14px; }
+            .main-nav a { font-size: 11px; }
             .hero-title { font-size: 28px; letter-spacing: 2px; }
             .hero-subtitle { font-size: 14px; letter-spacing: 3px; }
             .category-name { font-size: 13px; }
@@ -170,6 +194,10 @@
 <body>
 
     <header class="site-header">
+        <a href="index.html" class="header-brand">
+            <img src="CentralArchitects.jpg" alt="Central Architects Logo" class="header-logo">
+            <span class="header-title">CENTRAL ARCHITECTS</span>
+        </a>
         <nav class="main-nav">
             <a href="index.html" class="active">Головна</a>
             <a href="categories.html">Наші проекти</a>
