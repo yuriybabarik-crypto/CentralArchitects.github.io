@@ -4,6 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Проєкти — Central Architects</title>
+
+    <!-- Telegram WebApp SDK -->
+    <script src="https://telegram.org/js/telegram-web-app.js?63"></script>
+
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
         html { scroll-behavior: smooth; }
@@ -12,32 +16,34 @@
             background-color: #121212; 
             color: #e0e0e0; 
             line-height: 1.6; 
-            padding-top: 60px; 
+            padding-top: clamp(50px, 6vw, 60px); 
         }
         
-        /* HEADER & NAVIGATION */
+        /* FLEXIBLE & SCALABLE HEADER */
         .site-header { 
             position: fixed; 
             top: 0; 
             left: 0; 
             width: 100%; 
-            height: 60px; 
+            height: clamp(50px, 6vw, 60px); 
             background-color: rgba(18, 18, 18, 0.95); 
             backdrop-filter: blur(8px); 
             z-index: 1000; 
             display: flex; 
             align-items: center; 
             justify-content: space-between; 
-            padding: 0 30px;
+            padding: 0 clamp(10px, 2.5vw, 30px);
             border-bottom: 1px solid rgba(255, 255, 255, 0.1); 
         }
         .header-brand {
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: clamp(6px, 1vw, 12px);
             text-decoration: none;
             height: 100%;
+            padding: clamp(6px, 0.8vw, 10px) 0;
             z-index: 2;
+            flex-shrink: 0;
         }
         .header-logo {
             height: 100%;
@@ -47,10 +53,10 @@
         }
         .header-title {
             color: #ffffff;
-            font-size: 15px;
+            font-size: clamp(10px, 1.1vw, 15px);
             font-weight: 700;
             text-transform: uppercase;
-            letter-spacing: 1.5px;
+            letter-spacing: clamp(0.5px, 0.1vw, 1.5px);
             white-space: nowrap;
         }
         .main-nav { 
@@ -58,16 +64,17 @@
             left: 50%;
             transform: translateX(-50%);
             display: flex; 
-            gap: 35px; 
+            gap: clamp(10px, 2.5vw, 35px); 
             z-index: 1;
+            white-space: nowrap;
         }
         .main-nav a { 
             color: #ffffff; 
             text-decoration: none; 
-            font-size: 14px; 
+            font-size: clamp(10px, 1vw, 14px); 
             font-weight: 500; 
             text-transform: uppercase; 
-            letter-spacing: 1px; 
+            letter-spacing: clamp(0.3px, 0.08vw, 1px); 
             transition: color 0.3s; 
         }
         .main-nav a:hover, .main-nav a.active { color: #0073aa; }
@@ -75,7 +82,7 @@
         .main-container { max-width: 1400px; margin: 0 auto; padding: 40px 20px; }
 
         .page-title { 
-            font-size: 32px; 
+            font-size: clamp(22px, 3vw, 32px); 
             font-weight: 700; 
             text-transform: uppercase; 
             letter-spacing: 2px; 
@@ -167,9 +174,7 @@
         .site-footer-bottom { text-align: center; color: #666; font-size: 13px; margin-top: 40px; padding-top: 20px; border-top: 1px solid #1a1a1a; }
 
         @media (max-width: 768px) { 
-            .main-nav { gap: 18px; }
-            .main-nav a { font-size: 12px; }
-            .page-title { font-size: 22px; margin-bottom: 25px; }
+            .page-title { margin-bottom: 25px; }
             .projects-grid { gap: 10px; }
             .project-name { font-size: 12px; }
             .project-overlay { padding: 10px; }
@@ -180,11 +185,15 @@
             .contacts-body { grid-template-columns: 1fr; }
             .contacts-map { height: 200px; }
         }
+
+        @media (max-width: 480px) {
+            .header-title { display: none; }
+        }
     </style>
 </head>
 <body>
 
-    <!-- ОНОВЛЕНИЙ ХЕДЕР З INDEX.HTML -->
+    <!-- FLEXIBLE HEADER -->
     <header class="site-header">
         <a href="index.html" class="header-brand">
             <img src="CentralArchitects.jpg" alt="Central Architects Logo" class="header-logo">
@@ -296,6 +305,12 @@
         }
 
         document.addEventListener("DOMContentLoaded", async () => {
+            // Ініціалізація Telegram WebApp
+            if (window.Telegram && window.Telegram.WebApp) {
+                window.Telegram.WebApp.ready();
+                window.Telegram.WebApp.expand();
+            }
+
             // Contacts Modal Logic
             const contactsModal = document.getElementById('contacts-modal');
             const openBtn = document.getElementById('open-contacts-btn');

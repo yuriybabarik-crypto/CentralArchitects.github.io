@@ -84,7 +84,7 @@
             margin-bottom: 40px; 
         }
         
-        /* GALLERY GRID: 2 ПО ГОРИЗОНТАЛІ */
+        /* GALLERY GRID */
         .gallery-grid { 
             display: grid; 
             grid-template-columns: repeat(2, 1fr) !important; 
@@ -291,6 +291,7 @@
         </div>
     </div>
 
+    <!-- FOOTER BLOG SECTION -->
     <footer class="footer-blog">
         <div class="footer-blog-container">
             <h2 class="footer-blog-title">Цікаве у реалізації проєктів</h2>
@@ -318,7 +319,7 @@
 
     <script>
         const extensions = ['.jpg', '.JPG', '.png', '.PNG', '.webp', '.WEBP', '.jpeg', '.JPEG'];
-        const loadedImages = [];
+        let activeImagesList = [];
         let currentImageIndex = 0;
 
         const lightbox = document.getElementById('lightbox');
@@ -329,7 +330,7 @@
         const lbNext = document.getElementById('lb-next');
 
         function openLightbox(index) {
-            if (loadedImages.length === 0) return;
+            if (activeImagesList.length === 0) return;
             currentImageIndex = index;
             updateLightboxImage();
             lightbox.classList.add('active');
@@ -344,19 +345,21 @@
         function updateLightboxImage() {
             lbImg.style.opacity = '0';
             setTimeout(() => {
-                lbImg.src = loadedImages[currentImageIndex];
-                lbCounter.textContent = `${currentImageIndex + 1} / ${loadedImages.length}`;
+                lbImg.src = activeImagesList[currentImageIndex];
+                lbCounter.textContent = `${currentImageIndex + 1} / ${activeImagesList.length}`;
                 lbImg.style.opacity = '1';
             }, 150);
         }
 
         function showNextImage() {
-            currentImageIndex = (currentImageIndex + 1) % loadedImages.length;
+            if (activeImagesList.length === 0) return;
+            currentImageIndex = (currentImageIndex + 1) % activeImagesList.length;
             updateLightboxImage();
         }
 
         function showPrevImage() {
-            currentImageIndex = (currentImageIndex - 1 + loadedImages.length) % loadedImages.length;
+            if (activeImagesList.length === 0) return;
+            currentImageIndex = (currentImageIndex - 1 + activeImagesList.length) % activeImagesList.length;
             updateLightboxImage();
         }
 
@@ -389,7 +392,7 @@
             if (closeBtn) closeBtn.addEventListener('click', () => contactsModal.classList.remove('active'));
             if (overlay) overlay.addEventListener('click', () => contactsModal.classList.remove('active'));
 
-            // Load Project
+            // Load Project Data
             const urlParams = new URLSearchParams(window.location.search);
             const categoryType = urlParams.get('type') || 'interiors';
             const projectId = urlParams.get('id');
@@ -399,7 +402,7 @@
 
             try {
                 const response = await fetch('./projects.json');
-                if (!response.ok) throw new Error("JSON error");
+                if (!response.ok) throw new Error("Помилка завантаження JSON");
 
                 const data = await response.json();
                 const projectsList = data[categoryType] || [];
@@ -418,6 +421,7 @@
                 const count = project.imagesCount || 10;
 
                 galleryContainer.innerHTML = '';
+                const loadedArray = new Array(count).fill(null);
 
                 for (let i = 1; i <= count; i++) {
                     const numPadded = String(i).padStart(3, '0');
@@ -444,25 +448,34 @@
                         if (urlIndex >= possibleUrls.length) return;
                         const currentUrl = possibleUrls[urlIndex];
                         const temp = new Image();
+                        
                         temp.onload = () => {
-                            const itemIndex = loadedImages.length;
-                            loadedImages.push(currentUrl);
+                            loadedArray[i - 1] = currentUrl;
 
                             const itemWrapper = document.createElement('div');
                             itemWrapper.className = 'gallery-item';
+                            itemWrapper.dataset.index = i - 1;
 
                             const img = document.createElement('img');
                             img.src = currentUrl;
                             img.alt = `${project.title} - Фото ${i}`;
 
                             itemWrapper.appendChild(img);
-                            itemWrapper.addEventListener('click', () => openLightbox(itemIndex));
+                            
+                            itemWrapper.addEventListener('click', () => {
+                                activeImagesList = loadedArray.filter(url => url !== null);
+                                const realIndex = activeImagesList.indexOf(currentUrl);
+                                if (realIndex !== -1) openLightbox(realIndex);
+                            });
+
                             galleryContainer.appendChild(itemWrapper);
                         };
+
                         temp.onerror = () => {
                             urlIndex++;
                             tryLoadImage();
                         };
+
                         temp.src = currentUrl;
                     }
 
